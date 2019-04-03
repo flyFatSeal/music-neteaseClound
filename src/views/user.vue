@@ -17,7 +17,7 @@
           <div class="icon-description">我喜欢的</div>
         </div>
         <div class="control-item" data-type="collection">
-          <i class="iconfont icon-collection"></i>
+          <i class="iconfont icon-collection-my"></i>
           <div class="icon-description">我的收藏</div>
         </div>
       </div>

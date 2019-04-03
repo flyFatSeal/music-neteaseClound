@@ -13,9 +13,9 @@
       </div>
     </div>
     <div class="top-tab">
-      <span class="tab-name">推荐</span>
+      <!-- <span class="tab-name">推荐</span>
       <span class="tab-name">朋友</span>
-      <span class="tab-name">电台</span>
+      <span class="tab-name">电台</span>-->
     </div>
   </div>
 </template>

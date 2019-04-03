@@ -33,7 +33,7 @@
               <span class="songName">{{item.name}}</span>
               <p class="singer">- {{item.singer}}</p>
             </div>
-            <i class="iconfont icon-delete"></i>
+            <i class="iconfont icon-x"></i>
           </div>
         </div>
       </cube-scroll>
@@ -250,5 +250,8 @@ export default {
 .icon-laba {
   margin-right: 5px;
   margin-bottom: 3.5px;
+}
+.icon-x {
+  margin-right: 4vw;
 }
 </style>

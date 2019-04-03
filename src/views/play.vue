@@ -203,7 +203,7 @@ export default {
       return "暂无歌词";
     },
     miniIcon() {
-      return this.playing ? "icon-pause mini" : "icon-play mini";
+      return this.playing ? "icon-mini-pause mini " : "icon-mini-play mini";
     }
   },
   mounted() {
@@ -671,12 +671,13 @@ export default {
   }
 }
 .mini {
-  font-size: 8vw;
+  font-size: 5vw;
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
+  @include center;
 }
 @keyframes rotate-disk {
   0% {
