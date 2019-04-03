@@ -1,28 +1,36 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <keep-alive exclude="sheetList">
+      <router-view v-show="!fullScreen"/>
+    </keep-alive>
+    <Player></Player>
+    <single-song-list class="animated"></single-song-list>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Player from "views/play";
+import { mapGetters } from "vuex";
+import singleSongList from "components/singleSongList/singleSongList";
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
+    Player,
+    singleSongList
+  },
+  computed: {
+    ...mapGetters(["fullScreen"])
   }
-}
+};
 </script>
 
-<style>
+<style lang="scss">
+@import "@/common/scss/index.scss";
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: $font-size-small;
+  color: $color-text;
 }
 </style>

@@ -1,0 +1,50 @@
+// 背景图片
+@mixin bg-image($url) { 
+  background-image: url($url);
+  background-size:contain;
+}
+
+// 不换行
+@mixin no-wrap($number) {
+  display: -webkit-box;
+  webkit-box-orient: vertical;
+  -webkit-line-clamp: ($number);
+  overflow: hidden;
+}
+
+@mixin singleline-ellipsis($substract:0){
+  overflow: hidden;
+  -webkit-line-clamp:1;
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  width: 100% - $substract; 
+} 
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin left-center {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@mixin loading-animation($initHeight,$name,$delay) {
+  animation:$name 1s infinite;
+  animation-delay:$delay;
+  @keyframes #{$name} {
+    0% {
+      height:$initHeight
+    }
+    50%{
+      height:15px;
+    }
+    100%{
+      height:$initHeight
+    }
+  }
+}
