@@ -138,7 +138,7 @@ import progressBar from "base/progress-bar/progress-bar";
 import { animationMixin } from "common/js/mixin";
 import playList from "components/playList/playList.vue";
 import progressCircle from "base/progress-circle/progress-circle";
-import { getRandomInt } from "common/js/util";
+import { getRandomInt, throttle } from "common/js/util";
 export default {
   mixins: [animationMixin],
   data() {
@@ -243,19 +243,22 @@ export default {
     },
     next() {
       if (this.mode === playMode.sequence)
-        this.setCurrentIndex(this.currentIndex + 1);
+        this.setThrottleCurrentIndex(this.currentIndex + 1);
       else if (this.mode === playMode.loop) {
-        this.setCurrentIndex(this.currentIndex + 1);
+        this.setThrottleCurrentIndex(this.currentIndex + 1);
       } else {
         let random = getRandomInt(0, this.playlist.length);
         if (random === this.currentIndex)
           random = getRandomInt(0, this.playlist.length);
-        this.setCurrentIndex(random);
+        this.setThrottleCurrentIndex(random);
       }
     },
     prev() {
-      this.setCurrentIndex(this.currentIndex - 1);
+      this.setThrottleCurrentIndex(this.currentIndex - 1);
     },
+    setThrottleCurrentIndex: throttle(function(idx) {
+      this.setCurrentIndex(idx);
+    }, 1500),
     format(interval) {
       interval = interval | 0;
       let minute = (interval / 60) | 0;
@@ -275,6 +278,7 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop();
         this.currentLyric = null;
+        this.currentLineNum = 0;
       }
       this.noLyric = false;
       getLyric(id)
@@ -287,9 +291,9 @@ export default {
           }
         })
         .catch(() => {
+          this.currentLineNum = 0;
           this.currentLyric = null;
           this.noLyric = true;
-          this.currentLineNum = 0;
         });
     },
     handleLyric({ lineNum, txt }) {
@@ -358,7 +362,7 @@ export default {
       });
     },
     favoriteSong() {
-      if (this.islike) {
+      if (this.islike === "dislike") {
         this.saveFavoriteSongs(this.currentSong);
       } else this.deleteFavoriteList(this.currentSong);
     },
@@ -388,13 +392,7 @@ export default {
       this.savePlayHistory(newSong);
       this._getAudio(newSong.id);
       this._getLyric(this.currentSong.id);
-      //this.currentLyric.seek(0);
-      let stop = setInterval(() => {
-        if (this.duration) {
-          clearInterval(stop);
-        }
-        this.duration = this.$refs.audio.duration;
-      }, 150);
+      this.duration = this.$refs.audio.duration;
       this.setPlaying(true);
     }
   }
@@ -439,10 +437,12 @@ export default {
 }
 .player-top {
   width: 100vw;
+  height: 8vh;
+  @include center;
+  justify-content: space-between;
   border-bottom: 1px solid rgba(228, 228, 228, 0.1);
   .header-top-wrapper {
     width: 100vw;
-    margin-top: 3vw;
     @include no-wrap(1);
     @include center;
     justify-content: space-between;
@@ -467,27 +467,27 @@ export default {
   .volume-wrapper {
     @include center;
     position: absolute;
+    top: 8vh;
+    z-index: 99;
     justify-content: space-around;
     width: 100%;
     .icon-laba {
       font-size: 4.5vw;
-      margin-left: 6vw;
+      margin-left: 2vw;
       margin-bottom: 0.6vw;
     }
     .progress-bar-wrapper {
       width: 80%;
+      margin-right: 2vw;
     }
   }
 }
 .player-middle-cd {
   width: 100%;
-  height: 68vh;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  height: 72vh;
+  @include center;
   flex-direction: column;
   position: relative;
-  margin-bottom: 10vw;
   .function-bars {
     width: 100%;
     @include center;
@@ -501,7 +501,7 @@ export default {
     width: 110px;
     height: 157px;
     top: 0;
-    left: 183px;
+    left: 195px;
     @include bg-image("../common/image/needle.png");
     z-index: 99;
   }
@@ -654,6 +654,7 @@ export default {
       font-size: $font-size-small-x;
       color: $color-text;
       margin-bottom: 1vw;
+      @include singleline-ellipsis();
     }
     .singer {
       height: 10px;

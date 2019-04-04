@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-container">
-    <Header></Header>
+    <Header :active="activePage" @changePage="changePage"></Header>
     <div ref="slideWrapper" class="slide-container">
       <cube-slide
         ref="slide"
@@ -9,9 +9,10 @@
         :loop="loop"
         :auto-play="autoPlay"
         :interval="interval"
-        :initialIndex="1"
+        :initialIndex="initialIndex"
         :threshold="threshold"
         :stopPropagation="true"
+        @change="pageChange"
       >
         <cube-slide-item>
           <user></user>
@@ -31,6 +32,7 @@ import user from "components/user/user";
 export default {
   data() {
     return {
+      activePage: "index",
       loop: false,
       autoPlay: false,
       interval: 4000,
@@ -68,6 +70,14 @@ export default {
     async onPullingDown() {
       await this._getRecommendSheet();
       this.$refs.scroll.forceUpdate();
+    },
+    pageChange(e) {
+      if (e === 1) this.activePage = "index";
+      else this.activePage = "user";
+    },
+    changePage(e) {
+      this.initialIndex = e;
+      this.pageChange(e);
     }
   }
 };
@@ -79,11 +89,5 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-}
-.cube-slide {
-  overflow-y: visible;
-}
-.cube-slide-group {
-  overflow-y: visible;
 }
 </style>

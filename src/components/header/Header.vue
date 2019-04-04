@@ -1,12 +1,20 @@
 <template>
   <div class="head">
     <div class="top-icons">
-      <div class="user-center">
+      <div class="user-center" @click.stop="goUser">
         <i class="iconfont icon-list"></i>
       </div>
       <div class="nav-icons">
-        <i class="iconfont icon-music" @click.stop="goUser"></i>
-        <i class="iconfont icon-index" @click.stop="goIndex"></i>
+        <i
+          class="iconfont icon-music"
+          @click.stop="goUser"
+          :class="[active === 'user' ? 'active' : '']"
+        ></i>
+        <i
+          class="iconfont icon-index"
+          @click.stop="goIndex"
+          :class="[active === 'index'? 'active' : '']"
+        ></i>
       </div>
       <div class="search" @click.stop="search">
         <i class="iconfont icon-search"></i>
@@ -25,7 +33,12 @@ export default {
   data() {
     return {};
   },
-
+  props: {
+    active: {
+      type: String,
+      default: "index"
+    }
+  },
   components: {},
   methods: {
     search() {
@@ -34,14 +47,11 @@ export default {
       });
     },
     goUser() {
-      this.$router.push({
-        path: "/user"
-      });
+      this.$emit("changePage", 0);
     },
     goIndex() {
-      this.$router.push({
-        path: "/"
-      });
+      this.$emit("changePage", 1);
+      console.info(454);
     }
   }
 };
@@ -62,6 +72,9 @@ export default {
       display: flex;
       justify-content: space-around;
       align-items: center;
+      .active {
+        color: $color-background;
+      }
     }
     .user-center,
     .search {
@@ -71,7 +84,7 @@ export default {
   }
   .iconfont {
     font-size: 6vw;
-    color: $color-theme-l;
+    color: $color-text-ggg;
   }
   .top-tab {
     display: flex;

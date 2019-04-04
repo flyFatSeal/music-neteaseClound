@@ -14,7 +14,7 @@ export const setPlaying = function ({ commit }, boolean) {
 export const setCurrentIndex = function ({ commit, state }, index) {
     let playlist = state.playlist
     let setIndex
-    setIndex = index < 0 ? playlist.length - 1 : Math.min(playlist.length, index)
+    setIndex = index < 0 ? playlist.length - 1 : index === playlist.length ? 0 : index
     commit(types.SET_CURRENT_INDEX, setIndex)
 }
 

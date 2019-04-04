@@ -77,8 +77,8 @@ export default {
   data() {
     return {
       banners: [],
-      loop: false,
-      autoPlay: false,
+      loop: true,
+      autoPlay: true,
       interval: 4000,
       threshold: 0.3,
       speed: 400,
