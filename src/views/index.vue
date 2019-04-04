@@ -1,0 +1,89 @@
+<template>
+  <div class="recommend-container">
+    <Header></Header>
+    <div ref="slideWrapper" class="slide-container">
+      <cube-slide
+        ref="slide"
+        class="cube-slide"
+        :initial-index="initialIndex"
+        :loop="loop"
+        :auto-play="autoPlay"
+        :interval="interval"
+        :initialIndex="1"
+        :threshold="threshold"
+        :stopPropagation="true"
+      >
+        <cube-slide-item>
+          <user></user>
+        </cube-slide-item>
+        <cube-slide-item>
+          <recommend></recommend>
+        </cube-slide-item>
+      </cube-slide>
+    </div>
+  </div>
+</template>
+
+<script>
+import Header from "components/header/Header.vue";
+import recommend from "components/recommend/recommend";
+import user from "components/user/user";
+export default {
+  data() {
+    return {
+      loop: false,
+      autoPlay: false,
+      interval: 4000,
+      threshold: 0.4,
+      speed: 400,
+      allowVertical: false,
+      initialIndex: 1,
+      dotsSlot: false,
+      addItem3: false,
+      pullDownRefresh: true,
+      pullDownRefreshThreshold: 60,
+      pullDownRefreshStop: 40,
+      pullDownRefreshTxt: "已推荐个性化内容"
+    };
+  },
+  components: { Header, recommend, user },
+  computed: {
+    options() {
+      return {
+        pullDownRefresh: this.pullDownRefreshObj,
+        scrollbar: true
+      };
+    },
+    pullDownRefreshObj: function() {
+      return this.pullDownRefresh
+        ? {
+            threshold: parseInt(this.pullDownRefreshThreshold),
+            txt: this.pullDownRefreshTxt,
+            stopTime: 300
+          }
+        : false;
+    }
+  },
+  methods: {
+    async onPullingDown() {
+      await this._getRecommendSheet();
+      this.$refs.scroll.forceUpdate();
+    }
+  }
+};
+</script>
+<style  scoped lang="scss">
+.slide-container {
+  position: absolute;
+  top: 12vh;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+.cube-slide {
+  overflow-y: visible;
+}
+.cube-slide-group {
+  overflow-y: visible;
+}
+</style>

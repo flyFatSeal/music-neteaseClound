@@ -83,7 +83,7 @@ export default {
   width: 100vw;
   height: 100vh;
   position: absolute;
-  top: 0;
+  top: -12vh;
   z-index: 99;
   color: $color-theme-l;
   background-color: $color-background;
@@ -114,9 +114,6 @@ export default {
   }
 }
 .user-list-header {
-  position: fixed;
-  top: 0;
-  z-index: 2;
   width: 100%;
   @include center;
   justify-content: space-between;
@@ -133,7 +130,6 @@ export default {
 }
 .scroll-wrapper {
   height: 92vh;
-  margin-top: 8vh;
 }
 .iconfont {
   font-size: 8vw;

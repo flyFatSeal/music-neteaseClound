@@ -1,7 +1,7 @@
 <!-- 歌单列表组件 -->
 <template>
-  <transition @enter="enter" @leave="leave">
-    <div class="sheetList-wrapper" v-show="!fullScreen">
+  <transition enter-active-class="fadeInUp" leave-active-class="fadeOutDown">
+    <div class="sheetList-wrapper animated" v-show="!fullScreen">
       <div class="sheet-header">
         <div class="icon-wrapper" @click.stop="back">
           <i class="iconfont icon-back"></i>
@@ -72,7 +72,6 @@ import { animationMixin } from "common/js/mixin";
 import { createSong } from "common/js/song";
 import loading from "base/load/load";
 export default {
-  mixins: [animationMixin],
   name: "sheetList",
   data() {
     return {
@@ -127,11 +126,7 @@ export default {
             this.Disc = res.playlist;
             this.comments = res.comments;
             this.commentsNum = res.comments.total;
-            setTimeout(() => {
-              this.songs = this.Disc.tracks.map(item =>
-                this.normalizSong(item)
-              );
-            }, 1000);
+            this.songs = this.Disc.tracks.map(item => this.normalizSong(item));
           }
         });
     }

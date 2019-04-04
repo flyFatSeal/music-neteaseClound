@@ -1,6 +1,5 @@
 <template>
   <div class="recommend-container">
-    <Header></Header>
     <cube-scroll
       ref="scroll"
       :options="options"
@@ -71,7 +70,6 @@
 </template>
 
 <script>
-import Header from "components/header/Header.vue";
 import List from "base/list/list.vue";
 import { getBanners, getRecommendSheets, getNewSongs } from "api/recommend";
 import { ERR_OK } from "common/js/config";
@@ -102,7 +100,7 @@ export default {
     this._getRecommend();
     this._getRecommendSheet();
   },
-  components: { List, Header },
+  components: { List },
   computed: {
     options() {
       return {

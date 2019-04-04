@@ -4,6 +4,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import animated from 'animate.css';
+import vueg from 'vueg'
+
+Vue.use(vueg, router, {
+  duration: 0.3,
+  enter: 'slideInRight',
+  leave: 'slideInLeft'
+})
 Vue.use(animated)
 Vue.config.productionTip = false
 

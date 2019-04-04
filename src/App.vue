@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <keep-alive exclude="sheetList">
-      <router-view v-show="!fullScreen"/>
+      <router-view v-show="!fullScreen" v-transition/>
     </keep-alive>
     <Player></Player>
     <single-song-list class="animated"></single-song-list>
@@ -32,5 +32,8 @@ export default {
   left: 0;
   font-size: $font-size-small;
   color: $color-text;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

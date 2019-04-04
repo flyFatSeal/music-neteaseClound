@@ -1,7 +1,6 @@
 <!-- 用户组件 -->
 <template>
   <div class="user-wrapper">
-    <Header></Header>
     <cube-scroll ref="scroll" class="scroll-wrapper">
       <div class="user-control-wrapper" @click.stop="selectUserList">
         <div class="control-item" data-type="music">
@@ -10,15 +9,15 @@
         </div>
         <div class="control-item" data-type="playlist">
           <i class="iconfont icon-lately"></i>
-          <div class="icon-description">最近播放</div>
+          <div class="icon-description">最近播放（{{playHistory.length}}）</div>
         </div>
         <div class="control-item" data-type="favorite">
           <i class="iconfont icon-favorite"></i>
-          <div class="icon-description">我喜欢的</div>
+          <div class="icon-description">我喜欢的（{{favoriteList.length}}）</div>
         </div>
         <div class="control-item" data-type="collection">
           <i class="iconfont icon-collection-my"></i>
-          <div class="icon-description">我的收藏</div>
+          <div class="icon-description">我的收藏（{{favoriteList.length}}）</div>
         </div>
       </div>
       <div class="songSheet">
@@ -50,7 +49,6 @@
 
 <script>
 import userList from "components/userList/userList";
-import Header from "components/header/Header.vue";
 import { mapGetters } from "vuex";
 export default {
   data() {
@@ -68,7 +66,7 @@ export default {
     },
     ...mapGetters(["playHistory", "favoriteList"])
   },
-  components: { Header, userList },
+  components: { userList },
   methods: {
     selectUserList(e) {
       let type;
@@ -125,6 +123,9 @@ export default {
       width: 80%;
     }
   }
+}
+.scroll-wrapper {
+  height: 95vh;
 }
 .iconfont {
   font-size: 6.5vw;

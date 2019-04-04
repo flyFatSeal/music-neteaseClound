@@ -1,24 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Recommend from 'views/recommend.vue'
+import Index from 'views/index.vue'
 import sheetList from 'views/sheetList.vue'
 import rank from 'views/rank'
 import search from 'views/search'
-import user from 'views/user'
-
 
 Vue.use(Router)
+
 
 export default new Router({
     mode: 'history',
     routes: [
         {
             path: '/',
-            redirect: '/recommend'
-        },
-        {
-            path: '/recommend',
-            component: Recommend,
+            component: Index,
         },
         {
             path: '/sheetList/:id',
@@ -31,10 +26,6 @@ export default new Router({
         {
             path: '/search',
             component: search
-        },
-        {
-            path: '/user',
-            component: user
         }
     ]
 })

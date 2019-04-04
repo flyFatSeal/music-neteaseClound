@@ -656,6 +656,8 @@ export default {
       margin-bottom: 1vw;
     }
     .singer {
+      height: 10px;
+      padding-top: 2px;
       font-size: $font-size-small-s;
       color: $color-text-g;
       @include singleline-ellipsis();

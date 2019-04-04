@@ -40,7 +40,7 @@ export default {
     },
     goIndex() {
       this.$router.push({
-        path: "/recommend"
+        path: "/"
       });
     }
   }
@@ -52,6 +52,7 @@ export default {
   height: 12vh;
   width: 100vw;
   background: $color-theme;
+  position: relative;
   .top-icons {
     height: 6.5vh;
     display: flex;
