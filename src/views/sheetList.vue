@@ -68,7 +68,6 @@ import SongList from "components/songList/songList.vue";
 import { getDisc } from "api/songList.js";
 import { mapGetters } from "vuex";
 import { ERR_OK } from "common/js/config";
-import { animationMixin } from "common/js/mixin";
 import { createSong } from "common/js/song";
 import loading from "base/load/load";
 export default {

@@ -73,7 +73,7 @@ export default {
       this.insertSong({ type: "next", song: this.singleSongInfo });
     },
     showPopup(refId) {
-      return new Promise((res, rej) => {
+      return new Promise(res => {
         const component = this.$refs[refId];
         component.show();
         setTimeout(() => {

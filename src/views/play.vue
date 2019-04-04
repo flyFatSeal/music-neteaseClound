@@ -46,7 +46,7 @@
               <i class="iconfont icon-favorite" :class="islike" @click.stop="favoriteSong"></i>
               <i class="iconfont icon-download"></i>
               <i class="iconfont icon-comments"></i>
-              <i class="iconfont icon-liebiao"></i>
+              <i class="iconfont icon-liebiao" @click.stop="showSingleInfo"></i>
             </div>
           </div>
         </transition>
@@ -273,10 +273,6 @@ export default {
         const data = res.data;
         if (data.code === ERR_OK) {
           this.url = data.data[0]["url"];
-          this.$nextTick(() => {
-            //this.duration = this.$refs.audio.duration;
-            console.info("2", duration);
-          });
         }
       });
     },
@@ -372,6 +368,10 @@ export default {
         this.saveFavoriteSongs(this.currentSong);
       } else this.deleteFavoriteList(this.currentSong);
     },
+    showSingleInfo() {
+      this.setSingleSongInfo(this.currentSong);
+      this.setSingleSong(true);
+    },
     ...mapActions([
       "setPlaying",
       "setPlayMode",
@@ -381,7 +381,9 @@ export default {
       "setSongImage",
       "savePlayHistory",
       "saveFavoriteSongs",
-      "deleteFavoriteList"
+      "deleteFavoriteList",
+      "setSingleSong",
+      "setSingleSongInfo"
     ])
   },
   watch: {

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { getRecommendRank, getRankAll, getGlobalRank } from "api/rank";
+import { getRankAll } from "api/rank";
 import list from "base/list/list";
 import { ERR_OK } from "common/js/config";
 export default {
