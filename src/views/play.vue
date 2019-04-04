@@ -271,7 +271,13 @@ export default {
     _getAudio(id) {
       getAudio(id).then(res => {
         const data = res.data;
-        if (data.code === ERR_OK) this.url = data.data[0]["url"];
+        if (data.code === ERR_OK) {
+          this.url = data.data[0]["url"];
+          this.$nextTick(() => {
+            //this.duration = this.$refs.audio.duration;
+            console.info("2", duration);
+          });
+        }
       });
     },
     _getLyric(id) {
@@ -299,7 +305,7 @@ export default {
     handleLyric({ lineNum, txt }) {
       this.currentLineNum = lineNum;
       if (lineNum > 5) {
-        let lineEl = this.$refs.lyricLine[lineNum - 5];
+        let lineEl = this.$refs.lyricLine[lineNum - 4];
         this.$refs.lyricList.scrollToElement(lineEl, 1000);
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000);
@@ -382,6 +388,9 @@ export default {
     url(newUrl) {
       if (!newUrl.length) return;
       this.$refs.audio.src = newUrl;
+      setTimeout(() => {
+        this.duration = this.$refs.audio.duration;
+      }, 150);
     },
     currentTime() {
       this.percent = this.currentTime / this.duration;
@@ -392,7 +401,6 @@ export default {
       this.savePlayHistory(newSong);
       this._getAudio(newSong.id);
       this._getLyric(this.currentSong.id);
-      this.duration = this.$refs.audio.duration;
       this.setPlaying(true);
     }
   }
