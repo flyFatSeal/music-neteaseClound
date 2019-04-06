@@ -12,7 +12,9 @@
       :hotWords="hotWords"
       @selectQuery="selectQuery"
     ></search-box>
-    <search-list ref="searchlist" v-show="isSearch"></search-list>
+    <vue-lazy-component>
+      <search-list ref="searchlist" v-show="isSearch"></search-list>
+    </vue-lazy-component>
   </div>
 </template>
 
@@ -72,7 +74,6 @@ export default {
 @import "@/common/scss/index.scss";
 .search-wrapper {
   width: 100vw;
-  background: $color-background;
 }
 .search-top-wrapper {
   height: 10vw;

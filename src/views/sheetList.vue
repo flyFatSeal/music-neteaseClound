@@ -56,6 +56,7 @@
             </div>
           </div>
         </div>
+
         <song-list :songs="this.songs" v-if="this.songs.length"></song-list>
         <loading v-if="!this.songs.length"></loading>
       </cube-scroll>

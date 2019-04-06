@@ -1,8 +1,13 @@
 <!-- 歌曲播放组件 -->
 <template>
   <div class="play-wrapper" v-if="playlist.length">
-    <transition name="normal" @enter="enter" @leave="leave" class="normal-player-wrapper">
-      <div class="animation-wrapper" v-show="fullScreen">
+    <transition
+      name="normal"
+      enter-active-class="fadeIn"
+      leave-active-class="fadeOut"
+      class="normal-player-wrapper"
+    >
+      <div class="animation-wrapper animated" v-show="fullScreen">
         <div class="background">
           <div class="filter"></div>
           <img :src="currentSong.image" width="100%" height="100%">
@@ -32,10 +37,10 @@
             </div>
           </div>
         </div>
-        <transition name="cd" @enter="cdEnter" @leave="cdLeave">
-          <div class="player-middle-cd" v-show="pageState === 'cd'">
+        <transition name="cd" enter-active-class="fadeIn" leave-active-class="fadeOut">
+          <div class="player-middle-cd animated faster" v-show="pageState === 'cd'">
             <div class="player-bg"></div>
-            <div class="needle"></div>
+            <!-- <div class="needle"></div> -->
             <div class="cd-wrapper" :class="isRunning" @click.stop="pageStateChange">
               <div class="cd-cover"></div>
               <div class="cd-img-wrapper">
@@ -50,20 +55,26 @@
             </div>
           </div>
         </transition>
-        <cube-scroll ref="lyricList" class="scroll-wrapper" v-show="pageState !== 'cd'">
-          <div class="lyric-wrapper" @click.stop="pageStateChange">
-            <div class="currentLyric" v-if="currentLyric">
-              <p
-                ref="lyricLine"
-                class="text"
-                :class="{'current': currentLineNum === index}"
-                v-for="(line, index) in currentLyric.lines"
-                :key="line.key"
-              >{{line.txt}}</p>
+        <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
+          <cube-scroll
+            ref="lyricList"
+            class="scroll-wrapper animated faster"
+            v-show="pageState !== 'cd'"
+          >
+            <div class="lyric-wrapper" @click.stop="pageStateChange">
+              <div class="currentLyric" v-if="currentLyric">
+                <p
+                  ref="lyricLine"
+                  class="text"
+                  :class="{'current': currentLineNum === index}"
+                  v-for="(line, index) in currentLyric.lines"
+                  :key="line.key"
+                >{{line.txt}}</p>
+              </div>
+              <p class="no-lyric" v-if="currentLyric === null">{{upDatecurrentLyric}}</p>
             </div>
-            <p class="no-lyric" v-if="currentLyric === null">{{upDatecurrentLyric}}</p>
-          </div>
-        </cube-scroll>
+          </cube-scroll>
+        </transition>
         <div class="player-bottom">
           <div class="play-progress-bar-control">
             <span class="time current">{{format(currentTime)}}</span>
@@ -96,6 +107,7 @@
         </div>
       </div>
     </transition>
+
     <transition name="mini" class="mini-wrapper">
       <div class="mini-player" v-show="!fullScreen" @click.stop="fullPlayerScreen">
         <div class="icon-wrapper-mini">
@@ -115,7 +127,7 @@
         </div>
       </div>
     </transition>
-    <transition enter-active-class="slideInUp" leave-active-class="slideOutDown" :duration="2000">
+    <transition enter-active-class="slideInUp" leave-active-class="slideOutDown">
       <play-list
         @close="closed"
         :activePlayList="activePlayList"
@@ -135,12 +147,10 @@ import { mapGetters, mapActions } from "vuex";
 import Lyric from "lyric-parser";
 import { ERR_OK, playMode } from "common/js/config";
 import progressBar from "base/progress-bar/progress-bar";
-import { animationMixin } from "common/js/mixin";
 import playList from "components/playList/playList.vue";
 import progressCircle from "base/progress-circle/progress-circle";
 import { getRandomInt, throttle } from "common/js/util";
 export default {
-  mixins: [animationMixin],
   data() {
     return {
       percent: 0,
@@ -159,7 +169,6 @@ export default {
       playingLyric: ""
     };
   },
-
   components: { progressBar, progressCircle, playList },
   computed: {
     modeStyle() {
@@ -392,7 +401,7 @@ export default {
       this.$refs.audio.src = newUrl;
       setTimeout(() => {
         this.duration = this.$refs.audio.duration;
-      }, 150);
+      }, 400);
     },
     currentTime() {
       this.percent = this.currentTime / this.duration;
@@ -496,12 +505,14 @@ export default {
   width: 100%;
   height: 72vh;
   @include center;
+  justify-content: space-around;
   flex-direction: column;
   position: relative;
   .function-bars {
     width: 100%;
     @include center;
     justify-content: space-around;
+    height: 0vw;
     .icon-seq {
       font-size: 4vw;
     }
@@ -519,7 +530,6 @@ export default {
     position: relative;
     width: 85vw;
     height: 85vw;
-    margin-bottom: 12vw;
     @include center;
     position: relative;
     animation: rotate-disk 20s infinite normal linear;
@@ -636,7 +646,7 @@ export default {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 12vw;
+  height: 45px;
   border-top: 1px solid #e4e4e4;
   z-index: 99;
   background-color: $color-theme-l;
@@ -679,7 +689,7 @@ export default {
     height: 8vw;
     .icon-list {
       font-size: 8vw;
-      margin-left: 5vw;
+      margin-left: 2vw;
     }
   }
 }
