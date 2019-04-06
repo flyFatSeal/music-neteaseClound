@@ -12,6 +12,6 @@ export function getRecommendSheets() {
 }
 
 export function getNewSongs() {
-    const url = HOST + '/album/newest'
+    const url = HOST + '/personalized/newsong'
     return axios.get(url)
 }

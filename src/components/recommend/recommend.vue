@@ -63,17 +63,21 @@
           <span>排行榜</span>
         </div>
       </div>
-      <List :title="title" :data="songSheet" @getDisc="selectItem"></List>
-      <List :title="titleTwo" :data="newSongs"></List>
+      <List v-if="isShow" :title="title" :data="songSheet" @getDisc="selectItem"></List>
+      <List v-if="isShow" :title="titleTwo" :data="songs" :isSong="true" @getDisc="add"></List>
     </cube-scroll>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { createNewSong } from "common/js/song";
 import List from "base/list/list.vue";
 import { getBanners, getRecommendSheets, getNewSongs } from "api/recommend";
 import { ERR_OK } from "common/js/config";
+import { lazyLoadMixin } from "common/js/mixin";
 export default {
+  mixins: [lazyLoadMixin],
   data() {
     return {
       banners: [],
@@ -89,7 +93,7 @@ export default {
       title: "推荐歌单",
       titleTwo: "最新音乐",
       songSheet: [],
-      newSongs: [],
+      songs: [],
       pullDownRefresh: true,
       pullDownRefreshThreshold: 60,
       pullDownRefreshStop: 40,
@@ -104,8 +108,7 @@ export default {
   computed: {
     options() {
       return {
-        pullDownRefresh: this.pullDownRefreshObj,
-        scrollbar: true
+        pullDownRefresh: this.pullDownRefreshObj
       };
     },
     pullDownRefreshObj: function() {
@@ -116,7 +119,8 @@ export default {
             stopTime: 300
           }
         : false;
-    }
+    },
+    ...mapGetters(["playlist"])
   },
   methods: {
     goRank() {
@@ -134,7 +138,9 @@ export default {
       getNewSongs().then(res => {
         const data = res.data;
         if (data.code === ERR_OK) {
-          this.newSongs = data.albums.slice(0, 6);
+          this.songs = data.result.slice(0, 6).map(item => {
+            return createNewSong(item.song);
+          });
         }
       });
     },
@@ -151,10 +157,20 @@ export default {
       await this._getRecommendSheet();
       this.$refs.scroll.forceUpdate();
     },
-    selectItem(id) {
+    selectItem(ids) {
       this.$router.push({
-        path: `/sheetList/${id}`
+        path: `/sheetList/${ids.disc}`
       });
+    },
+    ...mapActions(["selectPlay", "insertSong"]),
+    add(ids) {
+      if (this.playlist.length) {
+        let song = this.songs[ids.id];
+        this.insertSong({ song });
+      } else {
+        let songs = this.songs;
+        this.selectPlay({ list: songs, index: ids.id });
+      }
     }
   }
 };

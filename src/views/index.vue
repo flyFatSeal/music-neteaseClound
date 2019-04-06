@@ -36,7 +36,7 @@ export default {
       loop: false,
       autoPlay: false,
       interval: 4000,
-      threshold: 0.4,
+      threshold: 0.45,
       speed: 400,
       allowVertical: false,
       initialIndex: 1,

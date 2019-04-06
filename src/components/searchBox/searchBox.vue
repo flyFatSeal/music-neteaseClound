@@ -20,7 +20,7 @@
         <p class="search-type">历史记录</p>
         <i class="iconfont icon-delete" @click.stop="deleteSearchList"></i>
       </div>
-      <div class="search-hot-word-wrapper">
+      <div class="search-hot-word-wrapper" @click.stop="search">
         <div
           class="hot-search-word"
           v-for="(item,index) in this.searchHistory"
@@ -57,7 +57,6 @@ export default {
 @import "@/common/scss/index.scss";
 .search-box-wrapper {
   width: 100vw;
-  background: $color-background;
 }
 .icon-wrapper {
   margin-left: 3vw;

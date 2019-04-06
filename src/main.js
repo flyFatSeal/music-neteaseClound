@@ -5,12 +5,19 @@ import router from './router'
 import store from './store'
 import animated from 'animate.css';
 import vueg from 'vueg'
+import VueLazyLoad from 'vue-lazyload'
+
+Vue.use(VueLazyLoad, {
+  loading: require('common/image/default.png')
+})
 
 Vue.use(vueg, router, {
   duration: 0.3,
   enter: 'slideInRight',
   leave: 'slideInLeft'
 })
+
+
 Vue.use(animated)
 Vue.config.productionTip = false
 

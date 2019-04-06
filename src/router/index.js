@@ -1,15 +1,32 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from 'views/index.vue'
-import sheetList from 'views/sheetList.vue'
-import rank from 'views/rank'
-import search from 'views/search'
-
 Vue.use(Router)
 
+const sheetList = (resolve) => {
+    import('views/sheetList.vue').then((module) => {
+        resolve(module)
+    })
+}
+
+const Index = (resolve) => {
+    import('views/index').then((module) => {
+        resolve(module)
+    })
+}
+
+const rank = (resolve) => {
+    import('views/rank').then((module) => {
+        resolve(module)
+    })
+}
+
+const search = (resolve) => {
+    import('views/search').then((module) => {
+        resolve(module)
+    })
+}
 
 export default new Router({
-    mode: 'history',
     routes: [
         {
             path: '/',

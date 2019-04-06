@@ -9,6 +9,16 @@ export default class Song {
   }
 }
 
+class NewSong {
+  constructor({ id, singer, name, album, image }) {
+    this.id = id
+    this.singer = singer
+    this.name = name
+    this.album = album
+    this.image = image
+  }
+}
+
 function singerName(arr) {
   let name = []
   name = arr.map((item) => {
@@ -27,6 +37,15 @@ export function createSong(music) {
     name: music.name,
     album: music.al.name,
     image: music.al.picUrl
+  })
+}
+export function createNewSong(music) {
+  return new NewSong({
+    id: music.id,
+    singer: music.artists[0].name,
+    name: music.name,
+    album: music.album.name,
+    image: music.album.picUrl,
   })
 }
 

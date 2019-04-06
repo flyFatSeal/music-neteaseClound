@@ -1,11 +1,6 @@
 <!-- 单个歌曲信息列表 -->
 <template>
-  <transition
-    name="single"
-    enter-active-class="slideInUp"
-    leave-active-class="slideOutDown"
-    :duration="2000"
-  >
+  <transition name="single" enter-active-class="slideInUp" leave-active-class="slideOutDown">
     <div
       class="single-song-list-wrapper"
       @click.stop="close"
@@ -43,7 +38,7 @@
           </div>
           <div class="single-checks-item">
             <i class="iconfont icon-play"></i>
-            <div class="icon-description">专辑:{{singleSongInfo.album}}</div>
+            <div class="icon-description">专辑：{{singleSongInfo.album}}</div>
           </div>
         </div>
       </div>
@@ -54,9 +49,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { animationMixin } from "common/js/mixin";
 export default {
-  mixins: [animationMixin],
   data() {
     return {};
   },
@@ -73,7 +66,7 @@ export default {
       this.insertSong({ type: "next", song: this.singleSongInfo });
     },
     showPopup(refId) {
-      return new Promise((res, rej) => {
+      return new Promise(res => {
         const component = this.$refs[refId];
         component.show();
         setTimeout(() => {

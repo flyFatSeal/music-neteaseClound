@@ -51,7 +51,6 @@ export default {
     },
     goIndex() {
       this.$emit("changePage", 1);
-      console.info(454);
     }
   }
 };

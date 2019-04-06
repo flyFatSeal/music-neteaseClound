@@ -7,12 +7,13 @@
         class="sheet-item"
         v-for="(item,index) in data"
         :key="index"
-        @click="selectItem(item.id)"
+        @click="selectItem({disc:item.id,id:index})"
       >
         <div class="cover-wrapper">
-          <img :src="item.picUrl" alt="封面">
+          <img v-if="isSong" v-lazy="item.image" alt="封面">
+          <img v-else v-lazy="item.picUrl" alt="封面">
           <p class="play-count">
-            <i class="iconfont icon-headphone"></i>
+            <i class="iconfont icon-headphones"></i>
             {{playCount(item.playCount || '')}}
           </p>
         </div>
@@ -32,6 +33,10 @@ export default {
     data: {
       type: Array,
       default: null
+    },
+    isSong: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -93,14 +98,11 @@ export default {
       margin-top: 9px;
       letter-spacing: 1px;
       line-height: 15px;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
+      @include singleline-ellipsis(3);
     }
   }
 }
 .iconfont {
-  font-size: 3px;
+  font-size: 2.3vw;
 }
 </style>

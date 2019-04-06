@@ -7,7 +7,7 @@
       </div>
       <p class="title">排行榜</p>
     </div>
-    <cube-scroll class="scroll-wrapper">
+    <cube-scroll class="scroll-wrapper" v-if="!loading">
       <div class="vertical-rank">
         <h3 class="rank-name">官方榜</h3>
         <div
@@ -27,6 +27,7 @@
           </div>
         </div>
       </div>
+
       <div class="flat-rank">
         <list
           v-for="(item,index) in this.equalRank"
@@ -36,25 +37,27 @@
         ></list>
       </div>
     </cube-scroll>
+    <loading v-else></loading>
   </div>
 </template>
 
 <script>
-import { getRecommendRank, getRankAll, getGlobalRank } from "api/rank";
+import { getRankAll } from "api/rank";
 import list from "base/list/list";
 import { ERR_OK } from "common/js/config";
+import loading from "base/load/load";
 export default {
   data() {
     return {
       verticalRanks: [],
-      equalRank: []
+      equalRank: [],
+      loading: true
     };
   },
   created() {
     this._getRank();
-    getRankAll();
   },
-  components: { list },
+  components: { list, loading },
   methods: {
     back() {
       this.$router.go(-1);
@@ -67,17 +70,21 @@ export default {
       return item;
     },
     _getRank() {
-      getRankAll().then(res => {
-        if (res.data.code === ERR_OK) {
-          this.verticalRanks = res.data.list.slice(0, 4);
-          this.equalRank.push(
-            res.data.list.slice(5, 11).map(item => this.normalizSong(item))
-          );
-          this.equalRank.push(
-            res.data.list.slice(12, 18).map(item => this.normalizSong(item))
-          );
-        }
-      });
+      getRankAll()
+        .then(res => {
+          if (res.data.code === ERR_OK) {
+            this.verticalRanks = res.data.list.slice(0, 4);
+            this.equalRank.push(
+              res.data.list.slice(5, 11).map(item => this.normalizSong(item))
+            );
+            this.equalRank.push(
+              res.data.list.slice(12, 18).map(item => this.normalizSong(item))
+            );
+          }
+        })
+        .then(() => {
+          this.loading = false;
+        });
     },
     goSheetList(id) {
       this.$router.push({

@@ -1,54 +1,49 @@
-import Velocity from "velocity-animate";
-import "velocity-animate/velocity.ui.js";
-export const animationMixin = {
-  methods: {
-    listbeforeEnter(el) {
-      el.style.transform = 'translateY(0)';
-      el.style.opacity = 1
+import { throttle, getClientHeight } from 'common/js/util'
+
+export const lazyLoadMixin = {
+    data() {
+        return {
+            isShow: false,
+            _throttleFn: null
+        }
     },
-    listEnter(el, done) {
-      Velocity(el, "slideInUp", { duration: 10000, complete: done });
+    methods: {
+        inViewShow() {
+            if (this.isShow) {
+                document.removeEventListener('scroll', this._throttleFn, false)
+                return
+            }
+            // 不支持IntersectionObserver api的情况下判断图片是否出现在可视区域内
+            let { $el } = this
+            const rect = $el.getBoundingClientRect()
+            // 出现在视野的时候加载元素
+            if (0 < rect.top && rect.top < getClientHeight()) {
+                this.isShow = true
+            }
+        }
     },
-    listLeave(el, done) {
-      Velocity(el, "slideOutDown", {
-        duration: 500,
-        complete: done
-      })
-    },
-    cdEnter(el, done) {
-      Velocity(el, "fadeInUp", { duration: 200, complete: done });
-    },
-    cdLeave(el, done) {
-      Velocity(el, "fadeOut", {
-        duration: 200,
-        complete: done
-      })
-    },
-    enter(el, done) {
-      Velocity(el, "fadeInUp", { duration: 200, complete: done });
-    },
-    leave(el, done) {
-      Velocity(el, "fadeOut", {
-        duration: 200,
-        complete: done
-      })
-    },
-    singleEnter(el, done) {
-      Velocity(el, "slideInDown", { duration: 1000, complete: done });
-    },
-    singleAfterEnter(el, done) {
-      el.style.background = 'rgba(19, 19, 19, 0.6)'
-      done()
-    },
-    singleLeave(el, done) {
-      Velocity(el, "slideOutDown", {
-        duration: 200,
-        complete: done
-      })
-    },
-    singleAfterLeave(el, done) {
-      el.style.background = ''
-      done()
+    mounted() {
+        // 支持IntersectionObserver的使用这个api 
+        if ("IntersectionObserver" in window) {
+            let lazyCompObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.intersectionRatio > 0) {
+                        this.isShow = true
+                        lazyCompObserver.unobserve(entry.target)
+                        // 当元素可见时，如果需要回调，则执行
+                        this.onVisible && this.onVisible()
+                    }
+                })
+            })
+            if (this.$el.nodeType === 1) {
+                lazyCompObserver.observe(this.$el)
+            }
+        } else {
+            // 不支持的使用getBoundingClientRect和scroll来判断
+            this.inViewShow()
+            this._throttleFn = throttle(this.inViewShow)
+            document.addEventListener('scroll', this._throttleFn, false)
+        }
     }
-  }
+
 }

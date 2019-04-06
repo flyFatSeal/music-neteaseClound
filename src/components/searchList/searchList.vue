@@ -7,6 +7,7 @@
       v-if="songs.length && !this.loading"
       @pulling-up="onPullingUp"
       :options="options"
+      :class="{hasBottom:playlist.length}"
     >
       <div class="list-top" @click.stop="playAll">
         <div class="playAll">
@@ -20,13 +21,15 @@
       </div>
       <song-item :songs="songs" :hasIndex="false" @selectItem="add"></song-item>
     </cube-scroll>
-    <loading v-if="!songs.length || this.loading"></loading>
+    <loading v-if="this.loading"></loading>
+    <no-result v-if="!this.result && !this.loading"></no-result>
   </div>
 </template>
 
 <script>
 import songItem from "base/songItem/songItem";
 import loading from "base/load/load";
+import noResult from "base/noResult/noResult";
 import { mapActions, mapGetters } from "vuex";
 import { ERR_OK } from "common/js/config";
 import { createSearchSong } from "common/js/song";
@@ -40,10 +43,11 @@ export default {
       page: 0,
       query: "",
       pullUpLoad: true,
-      pullUpLoadThreshold: 30
+      pullUpLoadThreshold: 30,
+      result: true
     };
   },
-  components: { songItem, loading },
+  components: { songItem, loading, noResult },
   computed: {
     options() {
       return {
@@ -75,17 +79,16 @@ export default {
     },
     onPullingUp() {
       queryWord(this.query, ++this.page).then(res => {
-        setTimeout(() => {
-          this.songs = this.songs.concat(
-            res.data.result.songs.map(item => createSearchSong(item))
-          );
-          this.$refs.scrollwrapper.forceUpdate();
-        }, 1500);
+        this.songs = this.songs.concat(
+          res.data.result.songs.map(item => createSearchSong(item))
+        );
+        this.refresh();
       });
     },
     refresh() {
       setTimeout(() => {
         this.$refs.scrollwrapper.refresh();
+        this.$refs.scrollwrapper.forceUpdate();
       }, 20);
     },
     search(query) {
@@ -99,9 +102,15 @@ export default {
           this.saveSearchList(query);
           this.query = query;
           if (res.data.code === ERR_OK) {
-            this.songs = res.data.result.songs.map(item =>
-              createSearchSong(item)
-            );
+            if (!res.data.result.songs) {
+              this.result = false;
+              this.loading = false;
+            } else {
+              this.songs = res.data.result.songs.map(item =>
+                createSearchSong(item)
+              );
+              this.result = true;
+            }
           }
           this.loading = false;
         }, 1500);
@@ -137,5 +146,8 @@ export default {
 }
 .iconfont {
   font-size: 6vw;
+}
+.hasBottom {
+  height: 87vh;
 }
 </style>
