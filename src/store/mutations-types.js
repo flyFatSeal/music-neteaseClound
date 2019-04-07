@@ -28,3 +28,5 @@ export const SET_SINGLE_SONG = 'SET_SINGLE_SONG'
 
 export const SET_SINGLE_SONG_INFO = 'SET_SINGLE_SONG_INFO'
 
+export const SET_LOADING = 'SET_LOADING'
+

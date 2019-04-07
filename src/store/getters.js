@@ -23,6 +23,8 @@ export const playHistory = state => state.playHistory
 
 export const favoriteList = state => state.favoriteList
 
+export const loading = state => state.loading
+
 export const showSingleSongInfo = state => state.showSingleSongInfo
 
 export const singleSongInfo = state => state.singleSongInfo

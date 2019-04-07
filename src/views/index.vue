@@ -9,16 +9,14 @@
         :loop="loop"
         :auto-play="autoPlay"
         :interval="interval"
-        :initialIndex="initialIndex"
         :threshold="threshold"
-        :stopPropagation="true"
         @change="pageChange"
       >
         <cube-slide-item>
-          <user></user>
+          <user :initPage="initialIndex"></user>
         </cube-slide-item>
         <cube-slide-item>
-          <recommend></recommend>
+          <recommend :initPage="initialIndex"></recommend>
         </cube-slide-item>
       </cube-slide>
     </div>
@@ -29,7 +27,9 @@
 import Header from "components/header/Header.vue";
 import recommend from "components/recommend/recommend";
 import user from "components/user/user";
+import { loadingMixin } from "common/js/mixin";
 export default {
+  mixins: [loadingMixin],
   data() {
     return {
       activePage: "index",
@@ -53,7 +53,7 @@ export default {
     options() {
       return {
         pullDownRefresh: this.pullDownRefreshObj,
-        scrollbar: true
+        scrollbar: false
       };
     },
     pullDownRefreshObj: function() {
@@ -67,10 +67,6 @@ export default {
     }
   },
   methods: {
-    async onPullingDown() {
-      await this._getRecommendSheet();
-      this.$refs.scroll.forceUpdate();
-    },
     pageChange(e) {
       if (e === 1) this.activePage = "index";
       else this.activePage = "user";
@@ -89,5 +85,9 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
+}
+.cube-slide-group {
+  overflow: auto;
+  width: 999px;
 }
 </style>

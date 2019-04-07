@@ -93,3 +93,7 @@ export const clearFavoriteList = function ({ commit }) {
 export const clearPlayHistoryAll = function ({ commit }) {
     commit(types.SET_PLAY_HISTORY, clearPlayHistory())
 }
+
+export const setLoading = function ({ commit }, boolean) {
+    commit(types.SET_LOADING, boolean)
+}

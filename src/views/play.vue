@@ -137,7 +137,8 @@
         v-if="activePlayList"
       ></play-list>
     </transition>
-    <audio autoplay ref="audio" @timeupdate="updateTime" @ended="audioPlayEnd"></audio>
+    <audio ref="audio" id="ad" @timeupdate="updateTime" @ended="audioPlayEnd"></audio>
+    <cube-button @click="showClose" v-show="false"></cube-button>
   </div>
 </template>
 
@@ -150,6 +151,7 @@ import progressBar from "base/progress-bar/progress-bar";
 import playList from "components/playList/playList.vue";
 import progressCircle from "base/progress-circle/progress-circle";
 import { getRandomInt, throttle } from "common/js/util";
+import { setInterval, clearInterval, setTimeout } from "timers";
 export default {
   data() {
     return {
@@ -166,7 +168,7 @@ export default {
       url: "",
       radius: 32,
       activePlayList: false,
-      playingLyric: ""
+      playingLyric: null
     };
   },
   components: { progressBar, progressCircle, playList },
@@ -278,12 +280,15 @@ export default {
       return minute + ":" + second;
     },
     _getAudio(id) {
-      getAudio(id).then(res => {
-        const data = res.data;
-        if (data.code === ERR_OK) {
-          this.url = data.data[0]["url"];
-        }
-      });
+      getAudio(id)
+        .then(res => {
+          const data = res.data;
+          if (data.code === ERR_OK) this.url = data.data[0]["url"];
+          if (!this.url) this.showClose();
+        })
+        .catch(() => {
+          this.showClose();
+        });
     },
     _getLyric(id) {
       if (this.currentLyric) {
@@ -362,6 +367,10 @@ export default {
     },
     pageStateChange() {
       this.pageState = this.pageState === "cd" ? "lyric" : "cd";
+      if (this.pageState === "lyric")
+        setTimeout(() => {
+          this.$refs.lyricList.refresh();
+        }, 10);
     },
     _getSongImg(id) {
       getSong(id).then(res => {
@@ -381,6 +390,23 @@ export default {
       this.setSingleSongInfo(this.currentSong);
       this.setSingleSong(true);
     },
+    getDuration() {
+      let count = 50;
+      this.duration = 0;
+      let stop = setInterval(() => {
+        if (this.duration > 0 || --count === 0) clearInterval(stop);
+        this.duration = this.$refs.audio.duration;
+      }, 200);
+    },
+    showClose() {
+      this.$refs.audio.src = null;
+      this.duration = 0;
+      this.$createDialog({
+        type: "alert",
+        showClose: true,
+        title: "抱歉，版权问题，歌曲已下架"
+      }).show();
+    },
     ...mapActions([
       "setPlaying",
       "setPlayMode",
@@ -397,11 +423,13 @@ export default {
   },
   watch: {
     url(newUrl) {
-      if (!newUrl.length) return;
+      if (!newUrl) {
+        this.showClose();
+        return;
+      }
       this.$refs.audio.src = newUrl;
-      setTimeout(() => {
-        this.duration = this.$refs.audio.duration;
-      }, 400);
+      this.$refs.audio.play();
+      this.getDuration();
     },
     currentTime() {
       this.percent = this.currentTime / this.duration;
@@ -409,6 +437,11 @@ export default {
     currentSong(newSong) {
       if (!newSong.id) return;
       if (!newSong.image) this._getSongImg(newSong.id);
+      if (this.currentLyric) {
+        this.currentLyric.stop();
+        this.currentLyric = null;
+        this.playingLyric = null;
+      }
       this.savePlayHistory(newSong);
       this._getAudio(newSong.id);
       this._getLyric(this.currentSong.id);

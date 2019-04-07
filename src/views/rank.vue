@@ -7,7 +7,7 @@
       </div>
       <p class="title">排行榜</p>
     </div>
-    <cube-scroll class="scroll-wrapper" v-if="!loading">
+    <cube-scroll ref="scrollwrapper" class="scroll-wrapper" v-if="!loading">
       <div class="vertical-rank">
         <h3 class="rank-name">官方榜</h3>
         <div
@@ -46,7 +46,9 @@ import { getRankAll } from "api/rank";
 import list from "base/list/list";
 import { ERR_OK } from "common/js/config";
 import loading from "base/load/load";
+import { scorllRefreshMixin, loadingMixin } from "common/js/mixin";
 export default {
+  mixins: [scorllRefreshMixin, loadingMixin],
   data() {
     return {
       verticalRanks: [],
@@ -86,7 +88,9 @@ export default {
           this.loading = false;
         });
     },
-    goSheetList(id) {
+    goSheetList(idx) {
+      let id;
+      id = Object.keys(idx).length > 1 ? idx.disc : idx;
       this.$router.push({
         path: `/sheetList/${id}`
       });

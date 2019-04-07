@@ -1,7 +1,7 @@
 <!-- 用户组件 -->
 <template>
   <div class="user-wrapper">
-    <cube-scroll ref="scroll" class="scroll-wrapper">
+    <cube-scroll ref="scrollwrapper" class="scroll-wrapper">
       <div class="user-control-wrapper" @click.stop="selectUserList">
         <div class="control-item" data-type="music">
           <i class="iconfont icon-music"></i>
@@ -50,12 +50,25 @@
 <script>
 import userList from "components/userList/userList";
 import { mapGetters } from "vuex";
+import { scorllRefreshMixin } from "common/js/mixin";
 export default {
+  mixins: [scorllRefreshMixin],
   data() {
     return {
       activeList: false,
       type: ""
     };
+  },
+  props: {
+    initPage: {
+      type: Number,
+      default: 0
+    }
+  },
+  watch: {
+    initPage() {
+      this.refresh();
+    }
   },
   computed: {
     songs() {
@@ -81,6 +94,9 @@ export default {
     },
     closeList() {
       this.activeList = false;
+    },
+    refresh() {
+      this.$refs.scrollwrapper.refresh();
     }
   }
 };

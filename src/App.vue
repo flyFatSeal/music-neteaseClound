@@ -3,6 +3,7 @@
     <keep-alive exclude="sheetList">
       <router-view v-show="!fullScreen" v-transition/>
     </keep-alive>
+    <Loading v-show="loading"></Loading>
     <Player></Player>
     <single-song-list class="animated faster"></single-song-list>
   </div>
@@ -11,15 +12,17 @@
 <script>
 import Player from "views/play";
 import { mapGetters } from "vuex";
+import Loading from "base/load/load";
 import singleSongList from "components/singleSongList/singleSongList";
 export default {
   name: "app",
   components: {
     Player,
-    singleSongList
+    singleSongList,
+    Loading
   },
   computed: {
-    ...mapGetters(["fullScreen"])
+    ...mapGetters(["fullScreen", "loading"])
   }
 };
 </script>

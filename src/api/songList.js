@@ -1,5 +1,5 @@
 import { HOST } from '../common/js/config'
-import axios from 'axios'; // 
+//import axios from 'axios'; // 
 
 function getDiscSongs(id) {
     const url = HOST + `/playlist/detail?id=${id}`

@@ -20,7 +20,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import SongItem from "base/songItem/songItem.vue";
+import { scorllRefreshMixin } from "common/js/mixin";
 export default {
+  mixins: [scorllRefreshMixin],
   data() {
     return {
       showSingleSongInfo: false,
