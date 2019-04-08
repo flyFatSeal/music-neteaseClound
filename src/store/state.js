@@ -11,7 +11,8 @@ const state = {
     playHistory: loadPlay(),
     favoriteList: loadFavorite(),
     showSingleSongInfo: false,
-    singleSongInfo: []
+    singleSongInfo: [],
+    loading: false
 }
 
 export default state

@@ -12,9 +12,7 @@
       :hotWords="hotWords"
       @selectQuery="selectQuery"
     ></search-box>
-    <vue-lazy-component>
-      <search-list ref="searchlist" v-show="isSearch"></search-list>
-    </vue-lazy-component>
+    <search-list ref="searchlist" v-show="isSearch"></search-list>
   </div>
 </template>
 
@@ -25,8 +23,9 @@ import { getHotWords } from "api/search";
 import { mapGetters } from "vuex";
 import { ERR_OK } from "common/js/config";
 import { debounce } from "common/js/util";
-
+import { loadingMixin } from "common/js/mixin";
 export default {
+  mixins: [loadingMixin],
   data() {
     return {
       hotWords: [],
@@ -74,6 +73,7 @@ export default {
 @import "@/common/scss/index.scss";
 .search-wrapper {
   width: 100vw;
+  height: 100vh;
 }
 .search-top-wrapper {
   height: 10vw;

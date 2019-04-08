@@ -9,16 +9,15 @@
         :loop="loop"
         :auto-play="autoPlay"
         :interval="interval"
-        :initialIndex="initialIndex"
+        :refreshResetCurrent="false"
         :threshold="threshold"
-        :stopPropagation="true"
         @change="pageChange"
       >
         <cube-slide-item>
-          <user></user>
+          <user :initPage="initialIndex"></user>
         </cube-slide-item>
         <cube-slide-item>
-          <recommend></recommend>
+          <recommend :initPage="initialIndex"></recommend>
         </cube-slide-item>
       </cube-slide>
     </div>
@@ -29,7 +28,10 @@
 import Header from "components/header/Header.vue";
 import recommend from "components/recommend/recommend";
 import user from "components/user/user";
+import { loadingMixin } from "common/js/mixin";
+import { mapGetters } from "vuex";
 export default {
+  mixins: [loadingMixin],
   data() {
     return {
       activePage: "index",
@@ -48,12 +50,20 @@ export default {
       pullDownRefreshTxt: "已推荐个性化内容"
     };
   },
+  watch: {
+    fullScreen() {
+      this.$refs.slide.refresh();
+    }
+  },
+  activated() {
+    this.$refs.slide.refresh();
+  },
   components: { Header, recommend, user },
   computed: {
     options() {
       return {
         pullDownRefresh: this.pullDownRefreshObj,
-        scrollbar: true
+        scrollbar: false
       };
     },
     pullDownRefreshObj: function() {
@@ -64,13 +74,10 @@ export default {
             stopTime: 300
           }
         : false;
-    }
+    },
+    ...mapGetters(["fullScreen"])
   },
   methods: {
-    async onPullingDown() {
-      await this._getRecommendSheet();
-      this.$refs.scroll.forceUpdate();
-    },
     pageChange(e) {
       if (e === 1) this.activePage = "index";
       else this.activePage = "user";
@@ -89,5 +96,9 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
+}
+.cube-slide-group {
+  overflow: auto;
+  width: 999px;
 }
 </style>

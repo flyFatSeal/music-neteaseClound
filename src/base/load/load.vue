@@ -1,11 +1,13 @@
 <!-- loading组件 -->
 <template>
-  <div class="loading-wrapper">
-    <div class="square one"></div>
-    <div class="square two"></div>
-    <div class="square three"></div>
-    <div class="square four"></div>
-    <span>努力加载中...</span>
+  <div class="load-outer-wrapper">
+    <div class="loading-wrapper">
+      <div class="square one"></div>
+      <div class="square two"></div>
+      <div class="square three"></div>
+      <div class="square four"></div>
+      <span>努力加载中...</span>
+    </div>
   </div>
 </template>
 
@@ -14,12 +16,21 @@ export default {};
 </script>
 <style  scoped lang="scss">
 @import "@/common/scss/index.scss";
+.load-outer-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  @include center;
+  align-items: flex-start;
+  background: #fff;
+  z-index: 101;
+}
 .loading-wrapper {
+  margin-top: 35vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  z-index: 101;
   height: 40px;
 }
 .square {

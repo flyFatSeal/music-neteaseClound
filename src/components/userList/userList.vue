@@ -8,7 +8,7 @@
       </div>
       <span @click.stop="cleanAll">清空</span>
     </div>
-    <cube-scroll ref="scroll" class="scroll-wrapper">
+    <cube-scroll ref="scrollwrapper" class="scroll-wrapper">
       <div class="list-top" @click.stop="playAll">
         <div class="playAll">
           <i class="iconfont icon-play"></i>
@@ -28,7 +28,9 @@
 <script>
 import songItem from "base/songItem/songItem";
 import { mapActions, mapGetters } from "vuex";
+import { scorllRefreshMixin } from "common/js/mixin";
 export default {
+  mixins: [scorllRefreshMixin],
   data() {
     return {};
   },

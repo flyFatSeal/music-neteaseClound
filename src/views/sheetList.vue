@@ -21,7 +21,7 @@
         <div class="filter"></div>
         <img :src="coverImageUrl" width="100%" height="100%">
       </div>
-      <cube-scroll ref="scroll" class="scroll-wrapper" :options="options">
+      <cube-scroll ref="scrollwrapper" class="scroll-wrapper" :options="options">
         <div class="sheet-top-wrapper">
           <div class="sheet-banner">
             <div class="cover-img-wrapper">
@@ -71,7 +71,9 @@ import { mapGetters } from "vuex";
 import { ERR_OK } from "common/js/config";
 import { createSong } from "common/js/song";
 import loading from "base/load/load";
+import { loadingMixin } from "common/js/mixin";
 export default {
+  mixins: [loadingMixin],
   name: "sheetList",
   data() {
     return {
@@ -83,6 +85,11 @@ export default {
   created() {
     this.comments;
     this._getDisc();
+  },
+  watch: {
+    fullScreen(val) {
+      this.$refs.scrollwrapper.refresh();
+    }
   },
   computed: {
     options() {
@@ -121,14 +128,21 @@ export default {
       const id = this.$route.params.id;
       if (!id) this.$router.back();
       else
-        getDisc(id).then(res => {
-          if (res.code === ERR_OK) {
-            this.Disc = res.playlist;
-            this.comments = res.comments;
-            this.commentsNum = res.comments.total;
-            this.songs = this.Disc.tracks.map(item => this.normalizSong(item));
-          }
-        });
+        getDisc(id)
+          .then(res => {
+            if (res.code === ERR_OK) {
+              this.Disc = res.playlist;
+              this.comments = res.comments;
+              this.commentsNum = res.comments.total;
+              this.songs = this.Disc.tracks.map(item =>
+                this.normalizSong(item)
+              );
+              this.setLoading(false);
+            }
+          })
+          .catch(() => {
+            console.info("errorList");
+          });
     }
   }
 };

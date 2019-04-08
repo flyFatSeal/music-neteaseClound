@@ -45,6 +45,9 @@ const mutations = {
     },
     [types.SET_SEARCH_HISTORY](state, song) {
         state.searchHistory = song
+    },
+    [types.SET_LOADING](state, boolean) {
+        state.loading = boolean
     }
 }
 

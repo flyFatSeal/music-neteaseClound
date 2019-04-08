@@ -1,7 +1,7 @@
 <template>
   <div class="recommend-container">
     <cube-scroll
-      ref="scroll"
+      ref="scrollwrapper"
       :options="options"
       @pulling-down="onPullingDown"
       class="scroll-wrapper"
@@ -63,8 +63,8 @@
           <span>排行榜</span>
         </div>
       </div>
-      <List v-if="isShow" :title="title" :data="songSheet" @getDisc="selectItem"></List>
-      <List v-if="isShow" :title="titleTwo" :data="songs" :isSong="true" @getDisc="add"></List>
+      <List :title="title" :data="songSheet" @getDisc="selectItem"></List>
+      <List :title="titleTwo" :data="songs" :isSong="true" @getDisc="add"></List>
     </cube-scroll>
   </div>
 </template>
@@ -75,9 +75,9 @@ import { createNewSong } from "common/js/song";
 import List from "base/list/list.vue";
 import { getBanners, getRecommendSheets, getNewSongs } from "api/recommend";
 import { ERR_OK } from "common/js/config";
-import { lazyLoadMixin } from "common/js/mixin";
+import { scorllRefreshMixin } from "common/js/mixin";
 export default {
-  mixins: [lazyLoadMixin],
+  mixins: [scorllRefreshMixin],
   data() {
     return {
       banners: [],
@@ -100,6 +100,12 @@ export default {
       pullDownRefreshTxt: "已推荐个性化内容"
     };
   },
+  props: {
+    initPage: {
+      type: Number,
+      default: 1
+    }
+  },
   mounted() {
     this._getRecommend();
     this._getRecommendSheet();
@@ -120,7 +126,16 @@ export default {
           }
         : false;
     },
-    ...mapGetters(["playlist"])
+    ...mapGetters(["playlist", "fullScreen"])
+  },
+  watch: {
+    fullScreen() {
+      this.$refs.slide.refresh();
+      this.$refs.scrollwrapper.refresh();
+    }
+  },
+  activated() {
+    this.$refs.slide.refresh();
   },
   methods: {
     goRank() {
@@ -155,12 +170,15 @@ export default {
     },
     async onPullingDown() {
       await this._getRecommendSheet();
-      this.$refs.scroll.forceUpdate();
+      this.$refs.scrollwrapper.forceUpdate();
     },
     selectItem(ids) {
       this.$router.push({
         path: `/sheetList/${ids.disc}`
       });
+    },
+    refresh() {
+      this.$refs.scrollwrapper.refresh();
     },
     ...mapActions(["selectPlay", "insertSong"]),
     add(ids) {

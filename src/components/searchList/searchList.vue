@@ -65,7 +65,12 @@ export default {
           }
         : false;
     },
-    ...mapGetters(["playlist"])
+    ...mapGetters(["playlist", "fullScreen"])
+  },
+  watch: {
+    fullScreen(boolean) {
+      if (!boolean) this.refresh();
+    }
   },
   methods: {
     ...mapActions(["selectPlay", "insertSong", "saveSearchList"]),

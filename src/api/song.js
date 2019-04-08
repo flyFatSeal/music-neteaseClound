@@ -15,3 +15,8 @@ export function getAudio(id) {
     const url = HOST + `/song/url?id=${id}`
     return axios.get(url)
 }
+
+export function getCopyright(id) {
+    const url = HOST + `/check/music?id=${id}`
+    return axios.get(url)
+}
