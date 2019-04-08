@@ -1,6 +1,14 @@
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export const scorllRefreshMixin = {
+    computed: {
+        ...mapGetters(["fullScreen"])
+    },
+    watch: {
+        fullScreen() {
+            this.$refs.scrollwrapper.refresh();
+        }
+    },
     activated() {
         this.$refs.scrollwrapper.refresh();
     }
@@ -12,7 +20,6 @@ export const loadingMixin = {
         next()
     },
     activated() {
-        console.info('adctive in')
         this.setLoading(false)
     },
     methods: {

@@ -9,6 +9,7 @@
         :loop="loop"
         :auto-play="autoPlay"
         :interval="interval"
+        :refreshResetCurrent="false"
         :threshold="threshold"
         @change="pageChange"
       >
@@ -28,6 +29,7 @@ import Header from "components/header/Header.vue";
 import recommend from "components/recommend/recommend";
 import user from "components/user/user";
 import { loadingMixin } from "common/js/mixin";
+import { mapGetters } from "vuex";
 export default {
   mixins: [loadingMixin],
   data() {
@@ -48,6 +50,14 @@ export default {
       pullDownRefreshTxt: "已推荐个性化内容"
     };
   },
+  watch: {
+    fullScreen() {
+      this.$refs.slide.refresh();
+    }
+  },
+  activated() {
+    this.$refs.slide.refresh();
+  },
   components: { Header, recommend, user },
   computed: {
     options() {
@@ -64,7 +74,8 @@ export default {
             stopTime: 300
           }
         : false;
-    }
+    },
+    ...mapGetters(["fullScreen"])
   },
   methods: {
     pageChange(e) {

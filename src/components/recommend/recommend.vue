@@ -126,12 +126,16 @@ export default {
           }
         : false;
     },
-    ...mapGetters(["playlist"])
+    ...mapGetters(["playlist", "fullScreen"])
   },
   watch: {
-    initPage(newPage) {
-      if (newPage === 1) this.refresh();
+    fullScreen() {
+      this.$refs.slide.refresh();
+      this.$refs.scrollwrapper.refresh();
     }
+  },
+  activated() {
+    this.$refs.slide.refresh();
   },
   methods: {
     goRank() {

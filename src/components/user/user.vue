@@ -20,6 +20,7 @@
           <div class="icon-description">我的收藏（{{favoriteList.length}}）</div>
         </div>
       </div>
+
       <div class="songSheet">
         <div class="navHidden">
           <i class="iconfont icon-back"></i>
@@ -40,7 +41,7 @@
         @close="closeList"
         :title="title"
         :songs="songs"
-        v-show="activeList"
+        v-if="activeList"
         class="animated faster"
       ></user-list>
     </transition>
@@ -94,6 +95,7 @@ export default {
     },
     closeList() {
       this.activeList = false;
+      this.refresh();
     },
     refresh() {
       this.$refs.scrollwrapper.refresh();

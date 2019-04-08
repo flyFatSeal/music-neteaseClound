@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(VueRouter)
+// import Vue from 'vue'
+// import Router from 'vue-router'
+// Vue.use(VueRouter)
 
 
 // //normlize
 
-// import Vue from 'vue'
-// import Router from 'vue-router'
-// Vue.use(Router)
+import Vue from 'vue'
+import Router from 'vue-router'
+Vue.use(Router)
 const sheetList = (resolve) => {
     import('views/sheetList.vue').then((module) => {
         resolve(module)

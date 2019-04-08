@@ -1,5 +1,5 @@
 import { HOST } from '../common/js/config'
-//import axios from 'axios'; // 
+import axios from 'axios'; // 
 
 export function getLyric(id) {
     const url = HOST + `/lyric?id=${id}`

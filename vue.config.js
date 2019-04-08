@@ -27,32 +27,32 @@ module.exports = {
       postCompile: true,
       theme: true
     }
-  },
-  chainWebpack: config => {
-
-    var externals = {
-      'vue': 'Vue',
-      'axios': 'axios',
-      'vue-router': 'VueRouter',
-      'vuex': 'Vuex',
-      'cube-ui': 'cube',
-      'vue-lazyload': 'VueLazyload',
-      'better-scroll': 'better-scroll'
-    }
-    config.externals(externals)
-    const cdn = {
-      css: [
-
-      ],
-      js: [
-      ]
-    }
-    config.plugin('html')
-      .tap(args => {
-        args[0].cdn = cdn
-        return args
-      })
-    // #endregion
-
   }
+  // chainWebpack: config => {
+
+  //   var externals = {
+  //     'vue': 'Vue',
+  //     'axios': 'axios',
+  //     'vue-router': 'VueRouter',
+  //     'vuex': 'Vuex',
+  //     'cube-ui': 'cube',
+  //     'vue-lazyload': 'VueLazyload',
+  //     'better-scroll': 'better-scroll'
+  //   }
+  //   config.externals(externals)
+  //   const cdn = {
+  //     css: [
+
+  //     ],
+  //     js: [
+  //     ]
+  //   }
+  //   config.plugin('html')
+  //     .tap(args => {
+  //       args[0].cdn = cdn
+  //       return args
+  //     })
+  //   // #endregion
+
+  // }
 }

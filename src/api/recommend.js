@@ -1,5 +1,5 @@
 import { HOST } from '../common/js/config'
-//import axios from 'axios'; // 引入axios
+import axios from 'axios'; // 引入axios
 
 export function getBanners() {
     const url = HOST + '/banner'
