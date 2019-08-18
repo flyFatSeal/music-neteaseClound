@@ -2,7 +2,7 @@
 // //use cdn
 
 // //import Vue from 'vue'
-// //import './cube-ui'
+// // import './cube-ui'
 // import App from './App.vue'
 // import router from './router'
 // import store from './store'
@@ -10,7 +10,7 @@
 // import vueg from 'vueg'
 // //import VueLazyLoad from 'vue-lazyload'
 
-// //cdn cube-ui
+// //cdn cube - ui
 // Vue.use(window.cube)
 
 // Vue.use(VueLazyload, {
@@ -43,10 +43,10 @@ import './cube-ui'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import animated from 'animate.css';
+//import animated from 'animate.css';
 import vueg from 'vueg'
 import VueLazyLoad from 'vue-lazyload'
-
+import WaterDrop from '@/base/waterDrop/waterDrop.js'
 Vue.use(VueLazyLoad, {
   loading: require('common/image/default.png')
 })
@@ -57,8 +57,8 @@ Vue.use(vueg, router, {
   leave: 'slideInLeft'
 })
 
-
-Vue.use(animated)
+Vue.prototype.$WaterDrop = WaterDrop
+//Vue.use(animated)
 Vue.config.productionTip = false
 
 new Vue({

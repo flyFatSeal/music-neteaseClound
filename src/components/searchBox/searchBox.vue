@@ -46,7 +46,10 @@ export default {
   components: {},
   methods: {
     search(e) {
-      if (e.target.innerText.length > 1)
+      if (
+        e.target.innerText.length >= 1 &&
+        e.target.className === "hot-search-word"
+      )
         this.$emit("selectQuery", e.target.innerText);
     },
     ...mapActions(["deleteSearchList"])

@@ -127,16 +127,12 @@
         </div>
       </div>
     </transition>
-    <transition enter-active-class="slideInUp" leave-active-class="slideOutDown">
-      <play-list
-        @close="closed"
-        :activePlayList="activePlayList"
-        :songNumber="playlist.length"
-        @closeAll="closeAll"
-        class="animated faster"
-        v-if="activePlayList"
-      ></play-list>
-    </transition>
+    <play-list
+      @close="closed"
+      :activePlayList="activePlayList"
+      :songNumber="playlist.length"
+      @closeAll="closeAll"
+    ></play-list>
     <audio ref="audio" id="ad" @timeupdate="updateTime" @ended="audioPlayEnd"></audio>
     <cube-button @click="showClose" v-show="false"></cube-button>
   </div>

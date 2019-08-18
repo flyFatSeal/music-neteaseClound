@@ -21,7 +21,12 @@
         <div class="filter"></div>
         <img :src="coverImageUrl" width="100%" height="100%">
       </div>
-      <cube-scroll ref="scrollwrapper" class="scroll-wrapper" :options="options">
+      <cube-scroll
+        ref="scrollwrapper"
+        class="scroll-wrapper"
+        :options="options"
+        :class="{hasBottom:playlist.length}"
+      >
         <div class="sheet-top-wrapper">
           <div class="sheet-banner">
             <div class="cover-img-wrapper">
@@ -77,7 +82,7 @@ export default {
   name: "sheetList",
   data() {
     return {
-      Disc: [],
+      Disc: {},
       songs: [],
       commentsNum: 0
     };
@@ -87,7 +92,7 @@ export default {
     this._getDisc();
   },
   watch: {
-    fullScreen(val) {
+    fullScreen() {
       this.$refs.scrollwrapper.refresh();
     }
   },
@@ -103,18 +108,21 @@ export default {
       };
     },
     title() {
-      return this.Disc.name;
+      return Object.keys(this.Disc).length ? this.Disc.name : "网易云音乐";
     },
     authorName() {
-      return this.Disc.creator.nickname;
+      return Object.keys(this.Disc).length ? this.Disc.creator.nickname : "";
     },
     avatarUrl() {
-      return this.Disc.creator.avatarUrl;
+      return Object.keys(this.Disc).length ? this.Disc.creator.avatarUrl : "";
     },
     coverImageUrl() {
-      return this.Disc.coverImgUrl;
+      return Object.keys(this.Disc).length
+        ? this.Disc.coverImgUrl +
+            "?imageView&thumbnail=253x0&quality=75&tostatic=0&type=jpg"
+        : "";
     },
-    ...mapGetters(["fullScreen"])
+    ...mapGetters(["fullScreen", "playlist"])
   },
   components: { SongList, loading },
   methods: {
@@ -275,5 +283,8 @@ export default {
       padding-top: 15%;
     }
   }
+}
+.hasBottom {
+  height: 85vh;
 }
 </style>
