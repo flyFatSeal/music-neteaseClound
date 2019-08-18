@@ -7,7 +7,12 @@
       </div>
       <p class="title">排行榜</p>
     </div>
-    <cube-scroll ref="scrollwrapper" class="scroll-wrapper" v-if="!loading">
+    <cube-scroll
+      ref="scrollwrapper"
+      class="scroll-wrapper"
+      v-if="!loading"
+      :class="{hasBottom:playlist.length}"
+    >
       <div class="vertical-rank">
         <h3 class="rank-name">官方榜</h3>
         <div
@@ -166,5 +171,8 @@ export default {
       }
     }
   }
+}
+.hasBottom {
+  height: 87vh;
 }
 </style>

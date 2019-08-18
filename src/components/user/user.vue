@@ -1,7 +1,7 @@
 <!-- 用户组件 -->
 <template>
   <div class="user-wrapper">
-    <cube-scroll ref="scrollwrapper" class="scroll-wrapper">
+    <cube-scroll ref="scrollwrapper" class="scroll-wrapper" :class="{hasBottom:playlist.length}">
       <div class="user-control-wrapper" @click.stop="selectUserList">
         <div class="control-item" data-type="music">
           <i class="iconfont icon-music"></i>
@@ -78,7 +78,7 @@ export default {
     title() {
       return this.type === "playlist" ? "最近播放" : "我喜欢的";
     },
-    ...mapGetters(["playHistory", "favoriteList"])
+    ...mapGetters(["playHistory", "favoriteList", "playlist"])
   },
   components: { userList },
   methods: {
@@ -155,5 +155,8 @@ export default {
   font-size: 5vw;
   color: $color-text-g;
   transform: rotate(-90deg);
+}
+.hasBottom {
+  height: 85vh;
 }
 </style>

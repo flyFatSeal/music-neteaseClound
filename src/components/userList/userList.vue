@@ -8,7 +8,7 @@
       </div>
       <span @click.stop="cleanAll">清空</span>
     </div>
-    <cube-scroll ref="scrollwrapper" class="scroll-wrapper">
+    <cube-scroll ref="scrollwrapper" class="scroll-wrapper" :class="{hasBottom:playlist.length}">
       <div class="list-top" @click.stop="playAll">
         <div class="playAll">
           <i class="iconfont icon-play"></i>
@@ -153,5 +153,8 @@ span {
   @include center;
   font-size: 5vw;
   color: $color-text-ggg;
+}
+.hasBottom {
+  height: 85vh;
 }
 </style>

@@ -2,15 +2,21 @@ import { mapActions, mapGetters } from "vuex";
 
 export const scorllRefreshMixin = {
     computed: {
-        ...mapGetters(["fullScreen"])
+        ...mapGetters(["fullScreen", "playlist"])
     },
     watch: {
         fullScreen() {
-            this.$refs.scrollwrapper.refresh();
+            setTimeout(() => {
+                this.$refs.scrollwrapper === void 0 ? '' :
+                    this.$refs.scrollwrapper.refresh();
+            }, 0);
         }
     },
     activated() {
-        this.$refs.scrollwrapper.refresh();
+        setTimeout(() => {
+            this.$refs.scrollwrapper === void 0 ? '' :
+                this.$refs.scrollwrapper.refresh();
+        }, 0);
     }
 }
 

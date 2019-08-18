@@ -35,7 +35,9 @@ import { ERR_OK } from "common/js/config";
 import { createSearchSong } from "common/js/song";
 import { queryWord } from "api/search";
 import { setTimeout } from "timers";
+import { scorllRefreshMixin } from "common/js/mixin";
 export default {
+  mixins: [scorllRefreshMixin],
   data() {
     return {
       songs: [],
@@ -92,8 +94,10 @@ export default {
     },
     refresh() {
       setTimeout(() => {
-        this.$refs.scrollwrapper.refresh();
-        this.$refs.scrollwrapper.forceUpdate();
+        if (this.$refs.scrollwrapper !== void 0) {
+          this.$refs.scrollwrapper.refresh();
+          this.$refs.scrollwrapper.forceUpdate();
+        }
       }, 20);
     },
     search(query) {

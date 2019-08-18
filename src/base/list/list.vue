@@ -10,7 +10,11 @@
         @click="selectItem({disc:item.id,id:index})"
       >
         <div class="cover-wrapper">
-          <img v-if="isSong" v-lazy="item.image" alt="封面">
+          <img
+            v-if="isSong"
+            v-lazy="item.image+'?imageView&thumbnail=253x0&quality=75&tostatic=0&type=jpg'"
+            alt="封面"
+          >
           <img v-else v-lazy="item.picUrl" alt="封面">
           <p class="play-count">
             <i class="iconfont icon-headphones"></i>

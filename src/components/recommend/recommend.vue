@@ -5,6 +5,7 @@
       :options="options"
       @pulling-down="onPullingDown"
       class="scroll-wrapper"
+      :class="{hasBottom:playlist.length}"
     >
       <div class="slide-bg"></div>
       <div class="slide-wrapper">
@@ -75,9 +76,8 @@ import { createNewSong } from "common/js/song";
 import List from "base/list/list.vue";
 import { getBanners, getRecommendSheets, getNewSongs } from "api/recommend";
 import { ERR_OK } from "common/js/config";
-import { scorllRefreshMixin } from "common/js/mixin";
+import { setTimeout } from "timers";
 export default {
-  mixins: [scorllRefreshMixin],
   data() {
     return {
       banners: [],
@@ -135,7 +135,9 @@ export default {
     }
   },
   activated() {
-    this.$refs.slide.refresh();
+    setTimeout(() => {
+      this.$refs.slide.refresh();
+    }, 0);
   },
   methods: {
     goRank() {
@@ -147,7 +149,11 @@ export default {
       getBanners().then(res => {
         const data = res.data;
         if (data.code === ERR_OK) {
-          this.banners = data.banners;
+          this.banners = data.banners.map(item => {
+            item.imageUrl +=
+              "?imageView&thumbnail=600x0&quality=80&tostatic=0&type=jpg";
+            return item;
+          });
         }
       });
       getNewSongs().then(res => {
@@ -163,8 +169,12 @@ export default {
       getRecommendSheets().then(res => {
         const data = res.data;
         if (data.code === ERR_OK) {
-          let start = Math.floor(Math.random() * 6);
-          this.songSheet = data.result.slice(start, start + 6);
+          //let start = Math.floor(Math.random() * 6);
+          this.songSheet = data.result.slice(0, 6).map(item => {
+            item.picUrl +=
+              "?imageView&thumbnail=253x0&quality=75&tostatic=0&type=jpg";
+            return item;
+          });
         }
       });
     },
@@ -276,5 +286,8 @@ export default {
       }
     }
   }
+}
+.hasBottom {
+  height: 83vh;
 }
 </style>

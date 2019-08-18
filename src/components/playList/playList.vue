@@ -1,43 +1,48 @@
 <!-- 播放列表组件 -->
 <template>
   <div class="playList-wrapper" @click="closePlayList">
-    <div class="list-wrapper" @click.stop>
-      <div class="playList-header">
-        <div class="playList-mode" @click="switchMode">
-          <i class="iconfont" :class="modeStyle.mode"></i>
-          <p>
-            {{modeStyle.txt}}
-            <span>({{songNumber}})</span>
-          </p>
-        </div>
-        <div class="song-collect">
-          <i class="iconfont icon-collection"></i>
-          收藏全部
-        </div>
-        <cube-button @click.stop="showBtn" class="deleteBtn">
-          <i class="iconfont icon-delete"></i>
-        </cube-button>
-      </div>
-      <cube-scroll ref="scrollPlaylist" class="scroll-wrapper" :stopPropagation="false">
-        <div class="playList-songs-wrapper" @click.stop="selectItem">
-          <div
-            class="playList-song-item"
-            :class="{'selectSong':currentIndex === index }"
-            v-for="(item,index) in playlist"
-            :key="index"
-            :data-id="index"
-            ref="listItem"
-          >
-            <div class="song-info-wrapper">
-              <i class="iconfont icon-laba" v-show="currentIndex === index"></i>
-              <span class="songName">{{item.name}}</span>
-              <p class="singer">- {{item.singer}}</p>
-            </div>
-            <i class="iconfont icon-x"></i>
+    <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
+      <div class="playList-background animated faster" v-if="activePlayList"></div>
+    </transition>
+    <transition enter-active-class="slideInUp" leave-active-class="slideOutDown">
+      <div class="list-wrapper animated faster" @click.stop v-if="activePlayList">
+        <div class="playList-header">
+          <div class="playList-mode" @click="switchMode">
+            <i class="iconfont" :class="modeStyle.mode"></i>
+            <p>
+              {{modeStyle.txt}}
+              <span>({{songNumber}})</span>
+            </p>
           </div>
+          <div class="song-collect">
+            <i class="iconfont icon-collection"></i>
+            收藏全部
+          </div>
+          <cube-button @click.stop="showBtn" class="deleteBtn">
+            <i class="iconfont icon-delete"></i>
+          </cube-button>
         </div>
-      </cube-scroll>
-    </div>
+        <cube-scroll ref="scrollPlaylist" class="scroll-wrapper" :stopPropagation="false">
+          <div class="playList-songs-wrapper" @touchstart.stop="selectItem">
+            <div
+              class="playList-song-item"
+              :class="{'selectSong':currentIndex === index }"
+              v-for="(item,index) in playlist"
+              :key="index"
+              :data-id="index"
+              ref="listItem"
+            >
+              <div class="song-info-wrapper">
+                <i class="iconfont icon-laba" v-show="currentIndex === index"></i>
+                <span class="songName">{{item.name}}</span>
+                <p class="singer">- {{item.singer}}</p>
+              </div>
+              <i class="iconfont icon-x"></i>
+            </div>
+          </div>
+        </cube-scroll>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -124,6 +129,9 @@ export default {
       this.$refs.scrollPlaylist.scrollToElement(this.$refs.listItem[id], 300);
     },
     selectItem(e) {
+      console.dir(e);
+      let [x, y] = [e.touches[0].pageX, e.touches[0].pageY];
+      this.$WaterDrop(e.target, { x, y });
       let id;
       let count = 4;
       if (e.target.className !== "playList-song-item")
@@ -151,11 +159,14 @@ export default {
 <style  scoped lang="scss">
 @import "@/common/scss/index.scss";
 .playList-wrapper {
-  width: 100vw;
-  height: 100vh;
   position: absolute;
   top: 0;
   z-index: 99;
+}
+.playList-background {
+  width: 100vw;
+  height: 100vh;
+  background: $color-list-backgroud;
 }
 .list-wrapper {
   position: fixed;
@@ -209,6 +220,7 @@ export default {
       height: 100%;
       width: 85%;
       margin-left: 15px;
+      position: relative;
       @include singleline-ellipsis(10);
       .songName {
         font-size: $font-size-medium;

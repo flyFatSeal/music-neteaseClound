@@ -12,7 +12,7 @@
       :hotWords="hotWords"
       @selectQuery="selectQuery"
     ></search-box>
-    <search-list ref="searchlist" v-show="isSearch"></search-list>
+    <search-list ref="searchlist" v-show="isSearch && this.query"></search-list>
   </div>
 </template>
 
@@ -42,22 +42,26 @@ export default {
       this.search(newQuery);
     }, 500)
   },
-  created() {
+  activated() {
+    this.isSearch = false;
     this._getHotWords();
   },
   computed: {
     ...mapGetters(["fullScreen"])
   },
+  deactivated() {
+    this.query = "";
+  },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
     _getHotWords() {
       getHotWords().then(res => {
         if (res.data.code === ERR_OK) {
           this.hotWords = res.data.result.hots.map(item => item.first);
         }
       });
-    },
-    back() {
-      this.$router.go(-1);
     },
     search(newQuery) {
       this.isSearch = true;
